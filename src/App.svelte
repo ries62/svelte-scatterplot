@@ -1,47 +1,36 @@
 <script>
-  import svelteLogo from './assets/svelte.svg'
-  import viteLogo from '/vite.svg'
-  import Counter from './lib/Counter.svelte'
+  import data from "./components/data/data.js"
+  import {scaleLinear} from "d3-scale"
+
+  const width=1100
+  const height=700
+  const margin={
+    top:100,
+    right:100,
+    bottom:100,
+    left:100
+  }
+  const innerWidth=width-margin.left-margin.right
+  const innerHeight=height-margin.top-margin.bottom
+
+  const xScale =scaleLinear().domain([0,100]).range([0,innerWidth])
+  const yScale =scaleLinear().domain([0,60]).range([innerHeight,0])
+
+  const x=d=>d.grade
+  const y =d=>d.hours
 </script>
 
-<main>
-  <div>
-    <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-      <img src={viteLogo} class="logo" alt="Vite Logo" />
-    </a>
-    <a href="https://svelte.dev" target="_blank" rel="noreferrer">
-      <img src={svelteLogo} class="logo svelte" alt="Svelte Logo" />
-    </a>
-  </div>
-  <h1>Vite + Svelte</h1>
-
-  <div class="card">
-    <Counter />
-  </div>
-
-  <p>
-    Check out <a href="https://github.com/sveltejs/kit#readme" target="_blank" rel="noreferrer">SvelteKit</a>, the official Svelte app framework powered by Vite!
-  </p>
-
-  <p class="read-the-docs">
-    Click on the Vite and Svelte logos to learn more
-  </p>
-</main>
+<svg {width} {height}>
+  <g transform="translate({margin.left},{margin.top})">
+{#each data as d}
+<circle cx={xScale(x(d))} cy={yScale(y(d))} r=10 fill='blue'></circle>
+{/each}
+</g>
+</svg>
 
 <style>
-  .logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
-    transition: filter 300ms;
-  }
-  .logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
-  }
-  .logo.svelte:hover {
-    filter: drop-shadow(0 0 2em #ff3e00aa);
-  }
-  .read-the-docs {
-    color: #888;
+  svg {
+    border: 1px solid blue;
   }
 </style>
+
